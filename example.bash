@@ -21,10 +21,26 @@ rs.status().members.map(m => `${m.name}(${m.stateStr})`).join('\n');
 ## mongo-rs3:27043(SECONDARY)
 
 # 4. 建立資料庫/使用者
-mongosh mongodb://root:root@mongo-rs1:27041/admin?replicaSet=RS
 ## mongosh內
 use nextjs
 db.createUser({ user: "nextjs", pwd: "nextjs",  roles: [ { role: "dbAdmin", db: "nextjs" }, { role: "readWrite", db: "nextjs" } ] });
+db.getUsers();
+## 會看到類似下列使用者建立
+## users: [
+##     {
+##       _id: 'nextjs.nextjs',
+##       userId: new UUID("744e797f-826e-4b05-8c12-fe52ae565bbf"),
+##       user: 'nextjs',
+##       db: 'nextjs',
+##       roles: [
+##         { role: 'readWrite', db: 'nextjs' },
+##         { role: 'dbAdmin', db: 'nextjs' }
+##       ],
+##       mechanisms: [ 'SCRAM-SHA-1', 'SCRAM-SHA-256' ]
+##     }
+##   ],
+##   ok: 1,
+
 db.test.insertOne({ "testf_id" : 1, "test_name" : "init" });
 ## 必須輸入一筆資料，db才會真的被創建
 ## {
@@ -38,6 +54,7 @@ mongosh mongodb://mongo-rs1:27041,mongo-rs2:27042,mongo-rs3:27043/?replicaSet=RS
 
 # miscellance
 ## mongosh內
+mongosh mongodb://root:root@mongo-rs1:27041/admin?replicaSet=RS
 db.getMongo().setReadPref('primary');
 db.User.find();
 rs.reconfig(cfg);
