@@ -12,7 +12,7 @@ services:
     volumes:
       - ./replica/config/mongod.yml:/resource/mongod.yml
       - ./replica/keyfile.txt:/opt/keyfile.txt
-      - ./replica/data/rs1:/data/db
+      - /mnt/iscsi_frontend/mongo/rs1:/data/db
       # - ./replica/docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
     entrypoint:
       - bash
@@ -41,7 +41,7 @@ services:
     volumes:
       - ./replica/config/mongod.yml:/resource/mongod.yml
       - ./replica/keyfile.txt:/opt/keyfile.txt
-      - ./replica/data/rs2:/data/db
+      - /mnt/iscsi_frontend/mongo/rs2:/data/db
     entrypoint:
       - bash
       - -c
@@ -68,7 +68,7 @@ services:
     volumes:
       - ./replica/config/mongod.yml:/resource/mongod.yml
       - ./replica/keyfile.txt:/opt/keyfile.txt
-      - ./replica/data/rs3:/data/db
+      - /mnt/iscsi_frontend/mongo/rs3:/data/db
     entrypoint:
       - bash
       - -c
