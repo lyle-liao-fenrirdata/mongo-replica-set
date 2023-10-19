@@ -1,0 +1,87 @@
+version: "3"
+services:
+  rs1:
+    image: mongo:7.0.2
+    restart: always
+    container_name: mongo-rs1
+    networks:
+      - mongodb
+    ports:
+      - 27041:27041
+    command: mongod --replSet RS --port 27041 --dbpath /data/db --config /resource/mongod.yml
+    volumes:
+      - ./replica/config/mongod.yml:/resource/mongod.yml
+      - ./replica/keyfile.txt:/opt/keyfile.txt
+      - ./replica/data/rs1:/data/db
+      # - ./replica/docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+    entrypoint:
+      - bash
+      - -c
+      - |
+        chmod 400 /opt/keyfile.txt
+        chown 999:999 /opt/keyfile.txt
+        exec docker-entrypoint.sh $$@
+    environment:
+      MONGO_INITDB_DATABASE: admin
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_USERNAME: user
+      MONGO_PASSWORD: user
+      INIT_WAIT_SEC: 10
+
+  rs2:
+    image: mongo:7.0.2
+    restart: always
+    container_name: mongo-rs2
+    networks:
+      - mongodb
+    ports:
+      - 27042:27042
+    command: mongod --replSet RS --port 27042 --dbpath /data/db --config /resource/mongod.yml
+    volumes:
+      - ./replica/config/mongod.yml:/resource/mongod.yml
+      - ./replica/keyfile.txt:/opt/keyfile.txt
+      - ./replica/data/rs2:/data/db
+    entrypoint:
+      - bash
+      - -c
+      - |
+        chmod 400 /opt/keyfile.txt
+        chown 999:999 /opt/keyfile.txt
+        exec docker-entrypoint.sh $$@
+    environment:
+      MONGO_INITDB_DATABASE: admin
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_USERNAME: user
+      MONGO_PASSWORD: user
+
+  rs3:
+    image: mongo:7.0.2
+    restart: always
+    container_name: mongo-rs3
+    networks:
+      - mongodb
+    ports:
+      - 27043:27043
+    command: mongod --replSet RS --port 27043 --dbpath /data/db --config /resource/mongod.yml
+    volumes:
+      - ./replica/config/mongod.yml:/resource/mongod.yml
+      - ./replica/keyfile.txt:/opt/keyfile.txt
+      - ./replica/data/rs3:/data/db
+    entrypoint:
+      - bash
+      - -c
+      - |
+        chmod 400 /opt/keyfile.txt
+        chown 999:999 /opt/keyfile.txt
+        exec docker-entrypoint.sh $$@
+    environment:
+      MONGO_INITDB_DATABASE: admin
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_USERNAME: user
+      MONGO_PASSWORD: user
+
+networks:
+  mongodb:

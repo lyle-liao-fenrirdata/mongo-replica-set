@@ -1,0 +1,10 @@
+security:
+  keyFile: /opt/keyfile.txt
+  transitionToAuth: true
+net:
+  bindIpAll: true
+storage:
+  engine: wiredTiger
+  wiredTiger:
+    engineConfig:
+      cacheSizeGB: 1.5
