@@ -85,21 +85,25 @@ services:
 
 networks:
   mongodb:
+    name: mongodb
 
 volumes:
   nfs_mongo_rs1:
+    name: nfs_mongo_rs1
     driver: local
     driver_opts:
       type: nfs
       o: addr=${NAS01_IP},nolock,soft,rw,nfsvers=3
       device: ":${NAS_MONGO_PATH}/rs1"
   nfs_mongo_rs2:
+    name: nfs_mongo_rs2
     driver: local
     driver_opts:
       type: nfs
       o: addr=${NAS01_IP},nolock,soft,rw,nfsvers=3
       device: ":${NAS_MONGO_PATH}/rs2"
   nfs_mongo_rs3:
+    name: nfs_mongo_rs3
     driver: local
     driver_opts:
       type: nfs
