@@ -4,6 +4,7 @@ security:
 net:
   bindIpAll: true
 storage:
+  dbPath: /data/rs3
   engine: wiredTiger
   wiredTiger:
     engineConfig:

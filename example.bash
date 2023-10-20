@@ -2,7 +2,7 @@
 docker-compose -f docker-compose-replica-set.yml up -d
 
 # 2. 設定 Replica Set
-docker-compose -f docker-compose-replica-set.yml exec rs1 bash
+docker-compose -f docker-compose-replica-set.yml exec mongo-rs1 bash
 ## 容器內
 ## 2.1 進入 mongosh
 mongosh mongodb://mongo-rs1:27041
