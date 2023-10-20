@@ -1,6 +1,6 @@
 version: "3"
 services:
-  rs1:
+  mongo-rs1:
     image: mongo:7.0.2
     restart: always
     container_name: mongo-rs1
@@ -8,11 +8,11 @@ services:
       - mongodb
     ports:
       - 27041:27041
-    command: mongod --replSet RS --port 27041 --dbpath /data/db --config /resource/mongod.yml
+    command: mongod --replSet RS --port 27041 --dbpath /data/rs1 --config /resource/mongod.yml
     volumes:
       - ./replica/config/mongod.yml:/resource/mongod.yml
       - ./replica/keyfile.txt:/opt/keyfile.txt
-      - nfs_mongo_rs1:/data/db
+      - nfs_mongo_data:/data
       # - ./replica/docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
     entrypoint:
       - bash
@@ -29,7 +29,7 @@ services:
       MONGO_PASSWORD: user
       INIT_WAIT_SEC: 3
 
-  rs2:
+  mongo-rs2:
     image: mongo:7.0.2
     restart: always
     container_name: mongo-rs2
@@ -37,11 +37,11 @@ services:
       - mongodb
     ports:
       - 27042:27042
-    command: mongod --replSet RS --port 27042 --dbpath /data/db --config /resource/mongod.yml
+    command: mongod --replSet RS --port 27042 --dbpath /data/rs2 --config /resource/mongod.yml
     volumes:
       - ./replica/config/mongod.yml:/resource/mongod.yml
       - ./replica/keyfile.txt:/opt/keyfile.txt
-      - nfs_mongo_rs2:/data/db
+      - nfs_mongo_data:/data
     entrypoint:
       - bash
       - -c
@@ -56,7 +56,7 @@ services:
       MONGO_USERNAME: user
       MONGO_PASSWORD: user
 
-  rs3:
+  mongo-rs3:
     image: mongo:7.0.2
     restart: always
     container_name: mongo-rs3
@@ -64,11 +64,11 @@ services:
       - mongodb
     ports:
       - 27043:27043
-    command: mongod --replSet RS --port 27043 --dbpath /data/db --config /resource/mongod.yml
+    command: mongod --replSet RS --port 27043 --dbpath /data/rs3 --config /resource/mongod.yml
     volumes:
       - ./replica/config/mongod.yml:/resource/mongod.yml
       - ./replica/keyfile.txt:/opt/keyfile.txt
-      - nfs_mongo_rs3:/data/db
+      - nfs_mongo_data:/data
     entrypoint:
       - bash
       - -c
@@ -88,24 +88,10 @@ networks:
     name: mongodb
 
 volumes:
-  nfs_mongo_rs1:
-    name: nfs_mongo_rs1
+  nfs_mongo_data:
+    name: nfs_mongo_data
     driver: local
     driver_opts:
       type: nfs
       o: addr=${NAS01_IP},nolock,soft,rw,nfsvers=3
-      device: ":${NAS_MONGO_PATH}/rs1"
-  nfs_mongo_rs2:
-    name: nfs_mongo_rs2
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=${NAS01_IP},nolock,soft,rw,nfsvers=3
-      device: ":${NAS_MONGO_PATH}/rs2"
-  nfs_mongo_rs3:
-    name: nfs_mongo_rs3
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=${NAS01_IP},nolock,soft,rw,nfsvers=3
-      device: ":${NAS_MONGO_PATH}/rs3"
+      device: ":${NAS_MONGO_PATH}"
