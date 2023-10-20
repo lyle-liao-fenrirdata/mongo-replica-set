@@ -12,7 +12,7 @@ services:
     volumes:
       - ./replica/config/mongod.yml:/resource/mongod.yml
       - ./replica/keyfile.txt:/opt/keyfile.txt
-      - /mnt/iscsi_frontend/mongo/rs1:/data/db
+      - nfs_mongo_rs1:/data/db
       # - ./replica/docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
     entrypoint:
       - bash
@@ -27,7 +27,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: root
       MONGO_USERNAME: user
       MONGO_PASSWORD: user
-      INIT_WAIT_SEC: 10
+      INIT_WAIT_SEC: 3
 
   rs2:
     image: mongo:7.0.2
@@ -41,7 +41,7 @@ services:
     volumes:
       - ./replica/config/mongod.yml:/resource/mongod.yml
       - ./replica/keyfile.txt:/opt/keyfile.txt
-      - /mnt/iscsi_frontend/mongo/rs2:/data/db
+      - nfs_mongo_rs2:/data/db
     entrypoint:
       - bash
       - -c
@@ -68,7 +68,7 @@ services:
     volumes:
       - ./replica/config/mongod.yml:/resource/mongod.yml
       - ./replica/keyfile.txt:/opt/keyfile.txt
-      - /mnt/iscsi_frontend/mongo/rs3:/data/db
+      - nfs_mongo_rs3:/data/db
     entrypoint:
       - bash
       - -c
@@ -85,3 +85,23 @@ services:
 
 networks:
   mongodb:
+
+volumes:
+  nfs_mongo_rs1:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NAS01_IP},nolock,soft,rw,nfsvers=3
+      device: ":${NAS_MONGO_PATH}/rs1"
+  nfs_mongo_rs2:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NAS01_IP},nolock,soft,rw,nfsvers=3
+      device: ":${NAS_MONGO_PATH}/rs2"
+  nfs_mongo_rs3:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NAS01_IP},nolock,soft,rw,nfsvers=3
+      device: ":${NAS_MONGO_PATH}/rs3"
