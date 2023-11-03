@@ -12,9 +12,9 @@ services:
       # - 27041:27041
     command: mongod --replSet RS --bind_ip localhost,mongo-rs1 --port 27017 --dbpath /data/db --config /resource/mongod.yml
     volumes:
-      - mongoConfig:/resource/mongod.yml
-      - mongoKeyfile:/opt/keyfile.txt
-      - mongo1data:/data/db
+      - ./replica/config/mongod.yml:/resource/mongod.yml
+      - ./replica/keyfile.txt:/opt/keyfile.txt
+      - /mnt/data/frontend/rs1:/data/db
     entrypoint:
       - bash
       - -c
@@ -40,9 +40,9 @@ services:
     #   - 27042:27042
     command: mongod --replSet RS --bind_ip localhost,mongo-rs2 --port 27017 --dbpath /data/db --config /resource/mongod.yml
     volumes:
-      - mongoConfig:/resource/mongod.yml
-      - mongoKeyfile:/opt/keyfile.txt
-      - mongo2data:/data/db
+      - ./replica/config/mongod.yml:/resource/mongod.yml
+      - ./replica/keyfile.txt:/opt/keyfile.txt
+      - /mnt/data/frontend/rs2:/data/db
     entrypoint:
       - bash
       - -c
@@ -68,9 +68,9 @@ services:
     #   - 27043:27043
     command: mongod --replSet RS --bind_ip localhost,mongo-rs3 --port 27017 --dbpath /data/db --config /resource/mongod.yml
     volumes:
-      - mongoConfig:/resource/mongod.yml
-      - mongoKeyfile:/opt/keyfile.txt
-      - mongo3data:/data/db
+      - ./replica/config/mongod.yml:/resource/mongod.yml
+      - ./replica/keyfile.txt:/opt/keyfile.txt
+      - /mnt/data/frontend/rs3:/data/db
     entrypoint:
       - bash
       - -c
@@ -125,7 +125,7 @@ services:
       - mongo-rs1
       - mongo-setup
     volumes:
-      - rs_v1.1:/backup
+      - mongodb-remote_v1.0:/backup
     entrypoint: /bin/bash
     command: >
       -c "while :; do
@@ -142,37 +142,7 @@ networks:
     driver: bridge
 
 volumes:
-  mongo1data:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: /mnt/data/frontend/rs1
-  mongo2data:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: /mnt/data/frontend/rs2
-  mongo3data:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: /mnt/data/frontend/rs3
-  mongoConfig:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: ./replica/config/mongod.yml
-  mongoKeyfile:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: ./replica/keyfile.txt
-  rs_v1.1:
+  mongodb-remote_v1.0:
     driver: local
     driver_opts:
       type: nfs
