@@ -103,7 +103,7 @@ services:
             { _id: 2, host: \"mongo-rs3:27017\", \"priority\": 0 }
           ]
         })
-      ' && echo 'MongoDB Replica Set initiated' && sleep 5 &&
+      ' && echo 'MongoDB Replica Set initiated' && sleep 20 &&
       echo 'Creating a test transaction...' &&
       mongo --host mongo-rs1 --eval '
         db.getSiblingDB(\"test\").runCommand({
@@ -131,7 +131,7 @@ services:
       -c "while :; do
             mongodump --host mongo-rs1 --port 27017 --out=/backup/$$(date +'%Y%m%d_%H%M%S');
             echo 'Backup completed';
-            sleep 5; # 
+            sleep 86400; # 
           done"
     networks:
       - mongodb

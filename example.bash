@@ -5,10 +5,10 @@ docker-compose -f docker-compose-replica-set.yml up -d
 docker-compose -f docker-compose-replica-set.yml exec mongo-rs1 bash
 ## 容器內
 ## 2.1 進入 mongosh
-mongosh mongodb://mongo-rs1:27041
+mongosh mongodb://mongo-rs1:27017
 ## mongosh內
 ## 2.2 cfg中priority設定 => 確保 mongo-rs1:27041 為 primary
-cfg = { "_id": "RS", "members": [{ "_id": 0, "host": "mongo-rs1:27041", "priority": 1 }, { "_id": 1, "host": "mongo-rs2:27042", "priority": 0 }, { "_id": 2, "host": "mongo-rs3:27043", "priority": 0 } ] };
+cfg = { "_id": "RS", "members": [{ "_id": 0, "host": "mongo-rs1:27017", "priority": 1 }, { "_id": 1, "host": "mongo-rs2:27017", "priority": 0 }, { "_id": 2, "host": "mongo-rs3:27017", "priority": 0 } ] };
 rs.initiate(cfg);
 ## 印出 { ok: 1 } 就設定完成
 
@@ -16,9 +16,9 @@ rs.initiate(cfg);
 ## mongosh內
 rs.status().members.map(m => `${m.name}(${m.stateStr})`).join('\n');
 ## 印出以下，就設定完成
-## mongo-rs1:27041(PRIMARY)
-## mongo-rs2:27042(SECONDARY)
-## mongo-rs3:27043(SECONDARY)
+## mongo-rs1:27017(PRIMARY)
+## mongo-rs2:27017(SECONDARY)
+## mongo-rs3:27017(SECONDARY)
 
 # 4. 建立資料庫/使用者
 ## mongosh內
@@ -41,7 +41,7 @@ db.getUsers();
 ##   ],
 ##   ok: 1,
 
-db.test.insertOne({ "testf_id" : 1, "test_name" : "init" });
+db.test.insertOne({ "test_id" : 1, "test_name" : "init" });
 ## 必須輸入一筆資料，db才會真的被創建
 ## {
 ##   acknowledged: true,
@@ -50,11 +50,11 @@ db.test.insertOne({ "testf_id" : 1, "test_name" : "init" });
 
 # 測試連線
 ## 容器內
-mongosh mongodb://mongo-rs1:27041,mongo-rs2:27042,mongo-rs3:27043/?replicaSet=RS
+mongosh mongodb://mongo-rs1:27017,mongo-rs2:27017,mongo-rs3:27017/?replicaSet=RS
 
 # miscellance
 ## mongosh內
-mongosh mongodb://root:root@mongo-rs1:27041/admin?replicaSet=RS
+mongosh mongodb://root:root@mongo-rs1:27017/admin?replicaSet=RS
 db.getMongo().setReadPref('primary');
 db.User.find();
 rs.reconfig(cfg);
