@@ -155,7 +155,7 @@ volumes:
       type: none
       device: /mnt/data/frontend/rs2
   mongo3data:
-    driver: local-persist
+    driver: local
     driver_opts:
       o: bind
       type: none
