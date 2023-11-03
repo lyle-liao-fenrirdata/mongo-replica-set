@@ -143,11 +143,11 @@ networks:
 
 volumes:
   mongo1data:
-    driver: local-persist
+    driver: local
     driver_opts:
       mountpoint: /mnt/data/frontend/rs1
   mongo2data:
-    driver: local-persist
+    driver: local
     driver_opts:
       mountpoint: /mnt/data/frontend/rs2
   mongo3data:
@@ -155,11 +155,11 @@ volumes:
     driver_opts:
       mountpoint: /mnt/data/frontend/rs3
   mongoConfig:
-    driver: local-persist
+    driver: local
     driver_opts:
       mountpoint: ./replica/config/mongod.yml
   mongoKeyfile:
-    driver: local-persist
+    driver: local
     driver_opts:
       mountpoint: ./replica/keyfile.txt
   rs_v1.1:
