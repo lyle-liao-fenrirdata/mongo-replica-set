@@ -145,23 +145,33 @@ volumes:
   mongo1data:
     driver: local
     driver_opts:
-      mountpoint: /mnt/data/frontend/rs1
+      o: bind
+      type: none
+      device: /mnt/data/frontend/rs1
   mongo2data:
     driver: local
     driver_opts:
-      mountpoint: /mnt/data/frontend/rs2
+      o: bind
+      type: none
+      device: /mnt/data/frontend/rs2
   mongo3data:
     driver: local-persist
     driver_opts:
-      mountpoint: /mnt/data/frontend/rs3
+      o: bind
+      type: none
+      device: /mnt/data/frontend/rs3
   mongoConfig:
     driver: local
     driver_opts:
-      mountpoint: ./replica/config/mongod.yml
+      o: bind
+      type: none
+      device: ./replica/config/mongod.yml
   mongoKeyfile:
     driver: local
     driver_opts:
-      mountpoint: ./replica/keyfile.txt
+      o: bind
+      type: none
+      device: ./replica/keyfile.txt
   rs_v1.1:
     driver: local
     driver_opts:
